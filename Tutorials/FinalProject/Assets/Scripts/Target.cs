@@ -7,6 +7,8 @@ public class Target : MonoBehaviour
     private Rigidbody targetRb;
     private GameManager gameManager;
     public ParticleSystem explosionParticle;
+    public AudioClip destroySound;
+    private AudioSource audioSource;
     private float minSpeed = 12;
     private float maxSpeed = 16;
     private float torqueRange = 10;
@@ -18,6 +20,8 @@ public class Target : MonoBehaviour
     {
         targetRb = GetComponent<Rigidbody>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+
+        audioSource = GetComponent<AudioSource>();
 
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
 
@@ -36,6 +40,7 @@ public class Target : MonoBehaviour
     {
         if(gameManager.isGameActive)
         {
+            AudioSource.PlayClipAtPoint(destroySound, Camera.main.transform.position, 5.0f);
             Destroy(gameObject);
             Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
             gameManager.UpdateScore(pointValue);
